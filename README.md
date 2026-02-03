@@ -98,24 +98,29 @@ You should see the webhook appear in the client logs and be forwarded to your lo
 The relay server accepts webhooks and forwards them to connected clients.
 
 **Command:**
+
 ```bash
 ./bin/relay [flags]
 ```
 
 **Flags:**
+
 - `--port`: Port to listen on (default: 8080)
 - `--log-level`: Log level: debug, info, warn, error (default: info)
 
 **Environment Variables:**
+
 - `RELAY_PORT`: Port to listen on
 - `LOG_LEVEL`: Log level
 
 **Webhook URL Format:**
+
 ```
 POST http://your-relay-server.com/webhook/{channel-id}/{path}
 ```
 
 **Example:**
+
 ```bash
 # This webhook will be sent to the client connected to channel "abc123"
 # The client will receive it with path "/github/push"
@@ -125,11 +130,13 @@ curl -X POST https://relay.example.com/webhook/abc123/github/push \
 ```
 
 **SSE Connection Endpoint:**
+
 ```
 GET http://your-relay-server.com/connect/{channel-id}
 ```
 
 **Health Check:**
+
 ```
 GET http://your-relay-server.com/health
 ```
@@ -139,23 +146,27 @@ GET http://your-relay-server.com/health
 The client connects to a relay server and forwards webhooks to a local target.
 
 **Command:**
+
 ```bash
 ./bin/client [flags]
 ```
 
 **Flags:**
+
 - `--relay-url`: Relay server URL (required)
 - `--channel-id`: Unique channel identifier (required)
 - `--target-url`: Local target URL to forward webhooks to (required)
 - `--log-level`: Log level: debug, info, warn, error (default: info)
 
 **Environment Variables:**
+
 - `RELAY_URL`: Relay server URL
 - `CHANNEL_ID`: Channel identifier
 - `TARGET_URL`: Target URL
 - `LOG_LEVEL`: Log level
 
 **Example:**
+
 ```bash
 ./bin/client \
   --relay-url=https://relay.example.com \
@@ -173,6 +184,7 @@ make build-all
 ```
 
 This creates:
+
 - `bin/relay` - Relay server binary
 - `bin/client` - Client binary
 
@@ -233,6 +245,7 @@ The relay will be available at `https://your-app.fly.dev`.
 ### Other Platforms
 
 The relay server is a standard Go HTTP application and can be deployed to:
+
 - AWS (ECS, Lambda, EC2)
 - Google Cloud (Cloud Run, GKE, Compute Engine)
 - Azure (Container Instances, AKS, App Service)
@@ -291,21 +304,21 @@ The relay server is a standard Go HTTP application and can be deployed to:
 
 ### Relay Server
 
-| Flag | Environment Variable | Default | Description |
-|------|---------------------|---------|-------------|
-| `--port` | `RELAY_PORT` | 8080 | Port to listen on |
-| `--log-level` | `LOG_LEVEL` | info | Log level (debug, info, warn, error) |
-| `--channel-secrets` | `RELAY_CHANNEL_SECRETS` | - | Channel secrets (format: channel1:secret1,channel2:secret2) |
+| Flag                | Environment Variable    | Default | Description                                                 |
+| ------------------- | ----------------------- | ------- | ----------------------------------------------------------- |
+| `--port`            | `RELAY_PORT`            | 8080    | Port to listen on                                           |
+| `--log-level`       | `LOG_LEVEL`             | info    | Log level (debug, info, warn, error)                        |
+| `--channel-secrets` | `RELAY_CHANNEL_SECRETS` | -       | Channel secrets (format: channel1:secret1,channel2:secret2) |
 
 ### Client
 
-| Flag | Environment Variable | Default | Description |
-|------|---------------------|---------|-------------|
-| `--relay-url` | `RELAY_URL` | - | Relay server URL (required) |
-| `--channel-id` | `CHANNEL_ID` | - | Unique channel ID (required) |
-| `--target-url` | `TARGET_URL` | - | Local target URL (required) |
-| `--token` | `TOKEN` | - | Authentication token for the channel |
-| `--log-level` | `LOG_LEVEL` | info | Log level (debug, info, warn, error) |
+| Flag           | Environment Variable | Default | Description                          |
+| -------------- | -------------------- | ------- | ------------------------------------ |
+| `--relay-url`  | `RELAY_URL`          | -       | Relay server URL (required)          |
+| `--channel-id` | `CHANNEL_ID`         | -       | Unique channel ID (required)         |
+| `--target-url` | `TARGET_URL`         | -       | Local target URL (required)          |
+| `--token`      | `TOKEN`              | -       | Authentication token for the channel |
+| `--log-level`  | `LOG_LEVEL`          | info    | Log level (debug, info, warn, error) |
 
 **Security**: See [AUTHENTICATION.md](AUTHENTICATION.md) for details on enabling and configuring authentication.
 
@@ -357,7 +370,7 @@ Potential improvements:
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](./LICENSE) file for details
 
 ## Contributing
 
