@@ -10,12 +10,36 @@ import (
 )
 
 // HandleSSE handles SSE connections from clients
-func HandleSSE(hub *Hub) http.HandlerFunc {
+func HandleSSE(hub *Hub, secrets *SecretsStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		channelID := chi.URLParam(r, "channel_id")
 		if channelID == "" {
 			http.Error(w, "Missing channel_id", http.StatusBadRequest)
 			return
+		}
+
+		// Validate authentication if enabled
+		if secrets.IsEnabled() {
+			authHeader := r.Header.Get("Authorization")
+			token, err := ExtractBearerToken(authHeader)
+			if err != nil {
+				log.Warn().
+					Err(err).
+					Str("channel_id", channelID).
+					Str("remote_addr", r.RemoteAddr).
+					Msg("Authentication failed: invalid header format")
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+
+			if !secrets.Validate(channelID, token) {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+
+			log.Debug().
+				Str("channel_id", channelID).
+				Msg("Authentication successful")
 		}
 
 		// Set SSE headers

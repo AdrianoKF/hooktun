@@ -16,6 +16,7 @@ var (
 	relayURL  string
 	channelID string
 	targetURL string
+	token     string
 	logLevel  string
 )
 
@@ -30,6 +31,7 @@ func init() {
 	rootCmd.Flags().StringVar(&relayURL, "relay-url", "", "Relay server URL (required)")
 	rootCmd.Flags().StringVar(&channelID, "channel-id", "", "Unique channel identifier (required)")
 	rootCmd.Flags().StringVar(&targetURL, "target-url", "", "Local target URL to forward webhooks to (required)")
+	rootCmd.Flags().StringVar(&token, "token", "", "Authentication token for the channel")
 	rootCmd.Flags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
 
 	rootCmd.MarkFlagRequired("relay-url")
@@ -39,6 +41,7 @@ func init() {
 	viper.BindPFlag("relay_url", rootCmd.Flags().Lookup("relay-url"))
 	viper.BindPFlag("channel_id", rootCmd.Flags().Lookup("channel-id"))
 	viper.BindPFlag("target_url", rootCmd.Flags().Lookup("target-url"))
+	viper.BindPFlag("token", rootCmd.Flags().Lookup("token"))
 	viper.BindPFlag("log_level", rootCmd.Flags().Lookup("log-level"))
 
 	viper.AutomaticEnv()
@@ -49,6 +52,7 @@ func run(cmd *cobra.Command, args []string) {
 	relayURL = viper.GetString("relay_url")
 	channelID = viper.GetString("channel_id")
 	targetURL = viper.GetString("target_url")
+	token = viper.GetString("token")
 	logLevel = viper.GetString("log_level")
 
 	// Setup logger
@@ -58,6 +62,7 @@ func run(cmd *cobra.Command, args []string) {
 		Str("relay_url", relayURL).
 		Str("channel_id", channelID).
 		Str("target_url", targetURL).
+		Bool("auth_enabled", token != "").
 		Str("log_level", logLevel).
 		Msg("Starting webhook relay client")
 
@@ -66,6 +71,7 @@ func run(cmd *cobra.Command, args []string) {
 		RelayURL:  relayURL,
 		ChannelID: channelID,
 		TargetURL: targetURL,
+		Token:     token,
 		LogLevel:  logLevel,
 	}
 

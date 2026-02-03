@@ -15,15 +15,17 @@ import (
 type SSEReader struct {
 	relayURL  string
 	channelID string
+	token     string
 	events    chan *shared.WebhookEvent
 	done      chan struct{}
 }
 
 // NewSSEReader creates a new SSE reader
-func NewSSEReader(relayURL, channelID string) *SSEReader {
+func NewSSEReader(relayURL, channelID, token string) *SSEReader {
 	return &SSEReader{
 		relayURL:  relayURL,
 		channelID: channelID,
+		token:     token,
 		events:    make(chan *shared.WebhookEvent),
 		done:      make(chan struct{}),
 	}
@@ -93,6 +95,11 @@ func (r *SSEReader) connect() error {
 
 	req.Header.Set("Accept", "text/event-stream")
 	req.Header.Set("Cache-Control", "no-cache")
+
+	// Add authentication token if provided
+	if r.token != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", r.token))
+	}
 
 	client := &http.Client{
 		Timeout: 0, // No timeout for SSE

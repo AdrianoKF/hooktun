@@ -13,16 +13,18 @@ import (
 
 // Server represents the relay server
 type Server struct {
-	port   int
-	hub    *Hub
-	server *http.Server
+	port    int
+	hub     *Hub
+	secrets *SecretsStore
+	server  *http.Server
 }
 
 // NewServer creates a new relay server
-func NewServer(port int) *Server {
+func NewServer(port int, secretsConfig string) *Server {
 	return &Server{
-		port: port,
-		hub:  NewHub(),
+		port:    port,
+		hub:     NewHub(),
+		secrets: NewSecretsStore(secretsConfig),
 	}
 }
 
@@ -40,7 +42,7 @@ func (s *Server) Start() error {
 	r.Use(middleware.RequestID)
 
 	// Routes
-	r.Get("/connect/{channel_id}", HandleSSE(s.hub))
+	r.Get("/connect/{channel_id}", HandleSSE(s.hub, s.secrets))
 	r.HandleFunc("/webhook/*", HandleWebhook(s.hub))
 
 	// Health check

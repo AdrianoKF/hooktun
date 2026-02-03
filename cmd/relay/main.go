@@ -15,8 +15,9 @@ import (
 )
 
 var (
-	port     int
-	logLevel string
+	port          int
+	logLevel      string
+	channelSecrets string
 )
 
 var rootCmd = &cobra.Command{
@@ -29,9 +30,11 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.Flags().IntVar(&port, "port", 8080, "Port to listen on")
 	rootCmd.Flags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
+	rootCmd.Flags().StringVar(&channelSecrets, "channel-secrets", "", "Channel secrets (format: channel1:secret1,channel2:secret2)")
 
 	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
 	viper.BindPFlag("log_level", rootCmd.Flags().Lookup("log-level"))
+	viper.BindPFlag("channel_secrets", rootCmd.Flags().Lookup("channel-secrets"))
 
 	viper.SetEnvPrefix("RELAY")
 	viper.AutomaticEnv()
@@ -41,6 +44,7 @@ func run(cmd *cobra.Command, args []string) {
 	// Get config from viper (respects env vars)
 	port = viper.GetInt("port")
 	logLevel = viper.GetString("log_level")
+	channelSecrets = viper.GetString("channel_secrets")
 
 	// Setup logger
 	shared.SetupLogger(logLevel)
@@ -48,10 +52,11 @@ func run(cmd *cobra.Command, args []string) {
 	log.Info().
 		Int("port", port).
 		Str("log_level", logLevel).
+		Bool("auth_enabled", channelSecrets != "").
 		Msg("Starting webhook relay server")
 
 	// Create server
-	server := relay.NewServer(port)
+	server := relay.NewServer(port, channelSecrets)
 
 	// Handle graceful shutdown
 	sigChan := make(chan os.Signal, 1)

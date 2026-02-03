@@ -5,5 +5,6 @@ type Config struct {
 	RelayURL  string
 	ChannelID string
 	TargetURL string
+	Token     string
 	LogLevel  string
 }

@@ -25,7 +25,7 @@ Go Webhook Relay consists of two components:
 - **Automatic Reconnection**: Clients reconnect automatically with exponential backoff
 - **1:1 Channel Mapping**: One client per channel (new clients replace existing ones)
 - **Full Request Preservation**: Headers, body, query parameters, and paths are preserved
-- **No Authentication Required**: Simple MVP design with channel IDs only
+- **Optional Authentication**: Pre-shared secrets for channel access control (disabled by default)
 - **Graceful Handling**: Accepts webhooks even when no client is connected (logged only)
 
 ## Quick Start
@@ -295,6 +295,7 @@ The relay server is a standard Go HTTP application and can be deployed to:
 |------|---------------------|---------|-------------|
 | `--port` | `RELAY_PORT` | 8080 | Port to listen on |
 | `--log-level` | `LOG_LEVEL` | info | Log level (debug, info, warn, error) |
+| `--channel-secrets` | `RELAY_CHANNEL_SECRETS` | - | Channel secrets (format: channel1:secret1,channel2:secret2) |
 
 ### Client
 
@@ -303,7 +304,10 @@ The relay server is a standard Go HTTP application and can be deployed to:
 | `--relay-url` | `RELAY_URL` | - | Relay server URL (required) |
 | `--channel-id` | `CHANNEL_ID` | - | Unique channel ID (required) |
 | `--target-url` | `TARGET_URL` | - | Local target URL (required) |
+| `--token` | `TOKEN` | - | Authentication token for the channel |
 | `--log-level` | `LOG_LEVEL` | info | Log level (debug, info, warn, error) |
+
+**Security**: See [AUTHENTICATION.md](AUTHENTICATION.md) for details on enabling and configuring authentication.
 
 ## Error Handling
 
@@ -324,7 +328,7 @@ The relay server is a standard Go HTTP application and can be deployed to:
 
 This is an MVP implementation with the following limitations:
 
-- **No authentication**: Channel IDs are the only security mechanism
+- **Optional authentication only**: Authentication is optional and disabled by default
 - **No persistence**: Webhooks are not stored; missed webhooks are lost
 - **1:1 client mapping**: Only one client per channel at a time
 - **No replay**: Webhooks cannot be replayed or retrieved
@@ -332,16 +336,16 @@ This is an MVP implementation with the following limitations:
 
 ## Future Enhancements
 
-Potential improvements (out of scope for MVP):
+Potential improvements:
 
-- Authentication tokens for channels
 - Multi-client broadcast per channel
 - Webhook persistence and replay
 - Web UI for monitoring and management
 - Request/response inspection dashboard
-- Webhook signature verification
+- Webhook signature verification (verify webhook sources)
 - Rate limiting per channel
 - Metrics and observability (Prometheus)
+- Advanced authentication (OAuth, JWT, etc.)
 
 ## Dependencies
 

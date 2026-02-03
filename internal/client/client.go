@@ -24,7 +24,7 @@ func NewClient(config *Config) (*Client, error) {
 
 	return &Client{
 		config:    config,
-		reader:    NewSSEReader(config.RelayURL, config.ChannelID),
+		reader:    NewSSEReader(config.RelayURL, config.ChannelID, config.Token),
 		forwarder: NewForwarder(config.TargetURL),
 		done:      make(chan struct{}),
 	}, nil
