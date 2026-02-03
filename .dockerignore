@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Claude
+.claude
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+bin/
+dist/
+build/
+
+# Documentation
+*.md
+docs/
+
+# Test files
+*_test.go
+test/
+
+# Environment
+.env
+.env.*

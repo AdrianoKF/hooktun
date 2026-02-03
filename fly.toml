@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for go-webhook-relay on 2026-02-03T08:26:58+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'go-webhook-relay'
+primary_region = 'fra'
+
+[build]
+dockerfile = "deployments/Dockerfile"
+
+[env]
+PORT = '8080'
+
+[http_service]
+internal_port = 8080
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '256mb'
+cpus = 1
+memory_mb = 256

@@ -1,0 +1,46 @@
+# GoReleaser configuration
+# See https://goreleaser.com for documentation
+
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod download
+
+builds:
+  # Relay Server
+  - id: relay
+    main: ./cmd/relay
+    binary: relay
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+  # Client
+  - id: client
+    main: ./cmd/client
+    binary: client
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
