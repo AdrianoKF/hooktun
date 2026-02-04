@@ -37,7 +37,7 @@ func NewWebhookEvent(r *http.Request, channelID string) (*WebhookEvent, error) {
 	queryParams := r.URL.RawQuery
 
 	event := &WebhookEvent{
-		ID:          uuid.New().String(),
+		ID:          uuid.Must(uuid.NewV7()).String(),
 		Timestamp:   time.Now(),
 		Method:      r.Method,
 		Path:        r.URL.Path,

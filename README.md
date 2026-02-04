@@ -231,7 +231,7 @@ services:
       - CLIENT_RELAY_URL=https://your-server.fly.dev
       - CLIENT_CHANNEL_ID=my-channel
       - CLIENT_TARGET_URL=http://your-app:3000
-      - CLIENT_TOKEN=${HOOKTUN_TOKEN}  # Optional
+      - CLIENT_TOKEN=${HOOKTUN_TOKEN} # Optional
 ```
 
 📖 **See the [Docker Deployment Guide](docs/DOCKER.md) for complete examples and best practices.**
@@ -306,7 +306,7 @@ The relay server is a standard Go HTTP application and can be deployed to:
 
 ```json
 {
-  "id": "uuid-v4",
+  "id": "uuid-v7",
   "timestamp": "2024-01-15T10:30:00Z",
   "method": "POST",
   "path": "/github/push",
