@@ -55,7 +55,6 @@ dockers_v2:
     dockerfile: deployments/Dockerfile.client
     images:
       - "ghcr.io/adrianokf/hooktun-client"
-      - "arumpold/hooktun-client"
     tags:
       - "v{{ .Version }}"
       - "{{ if .IsNightly }}nightly{{ end }}"
