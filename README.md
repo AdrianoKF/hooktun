@@ -85,12 +85,6 @@ curl -X POST http://localhost:8080/webhook/test123/api/hook \
 
 You should see the webhook appear in the client logs and be forwarded to your local service.
 
-### Automated Testing
-
-```bash
-./scripts/local-test.sh
-```
-
 ## Usage
 
 ### Relay Server
@@ -261,6 +255,8 @@ fly logs
 ```
 
 The relay will be available at `https://your-app.fly.dev`.
+
+Optionally, you can set up secrets for channel authentication, see the [authentication guide](docs/AUTHENTICATION.md).
 
 ### Other Platforms
 
