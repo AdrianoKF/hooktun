@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Local testing script for webhook relay
+# Local testing script for hooktun
 
 set -e
 
-echo "=== Webhook Relay Local Test ==="
+echo "=== Hooktun Local Test ==="
 echo ""
 
 # Colors

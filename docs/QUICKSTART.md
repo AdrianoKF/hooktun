@@ -1,13 +1,13 @@
 # Quick Start Guide
 
-Get started with Go Webhook Relay in 5 minutes.
+Get started with Hooktun in 5 minutes.
 
 ## Installation
 
 ```bash
 # Clone and build
-git clone https://github.com/adrianokf/go-webhook-relay.git
-cd go-webhook-relay
+git clone https://github.com/adrianokf/hooktun.git
+cd hooktun
 make build-all
 ```
 
@@ -21,7 +21,7 @@ make build-all
 
 You should see:
 ```
-8:19AM INF Starting webhook relay server log_level=info port=8080
+8:19AM INF Starting hooktun server log_level=info port=8080
 8:19AM INF Starting relay server port=8080
 ```
 
@@ -44,7 +44,7 @@ python3 -m http.server 3000
 
 You should see:
 ```
-8:19AM INF Starting webhook relay client channel_id=my-channel relay_url=http://localhost:8080 target_url=http://localhost:3000
+8:19AM INF Starting hooktun client channel_id=my-channel relay_url=http://localhost:8080 target_url=http://localhost:3000
 8:19AM INF Connecting to relay server channel_id=my-channel relay_url=http://localhost:8080
 8:19AM INF Connected to relay server channel_id=my-channel
 ```
@@ -105,15 +105,15 @@ Instead of flags, use environment variables:
 ```bash
 # Relay
 export RELAY_PORT=8080
-export LOG_LEVEL=info
-./bin/relay
+export RELAY_LOG_LEVEL=info
+./bin/hooktun
 
-# Client
-export RELAY_URL=http://localhost:8080
-export CHANNEL_ID=my-channel
-export TARGET_URL=http://localhost:3000
-export LOG_LEVEL=debug
-./bin/client
+# Client (note the CLIENT_ prefix)
+export CLIENT_RELAY_URL=http://localhost:8080
+export CLIENT_CHANNEL_ID=my-channel
+export CLIENT_TARGET_URL=http://localhost:3000
+export CLIENT_LOG_LEVEL=debug
+./bin/hooktun-client
 ```
 
 ## Multiple Clients

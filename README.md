@@ -1,13 +1,13 @@
-# Go Webhook Relay
+# Hooktun 🚇
 
-A lightweight webhook relay system that forwards webhook events from a public relay server to local clients via Server-Sent Events (SSE).
+A lightweight webhook tunnel system that forwards webhook events from a public server to local clients via Server-Sent Events (SSE).
 
 ## Overview
 
-Go Webhook Relay consists of two components:
+Hooktun consists of two components:
 
-1. **Relay Server**: A public server that receives webhooks and forwards them to connected clients via SSE
-2. **Client**: A local application that connects to the relay server and forwards received webhooks to a target service
+1. **Hooktun Server**: A public server that receives webhooks and forwards them to connected clients via SSE
+2. **Hooktun Client**: A local application that connects to the tunnel server and forwards received webhooks to a target service
 
 ```
 ┌─────────────┐         ┌──────────────┐         ┌─────────────┐         ┌──────────┐
@@ -39,8 +39,8 @@ Go Webhook Relay consists of two components:
 
 ```bash
 # Clone the repository
-git clone https://github.com/adrianokf/go-webhook-relay.git
-cd go-webhook-relay
+git clone https://github.com/adrianokf/hooktun.git
+cd hooktun
 
 # Install dependencies
 go mod download
@@ -202,6 +202,8 @@ make build-client
 
 ### Docker
 
+**Relay Server:**
+
 Build and run the relay server in Docker:
 
 ```bash
@@ -212,9 +214,27 @@ make docker-run
 Or manually:
 
 ```bash
-docker build -f deployments/Dockerfile -t go-webhook-relay:latest .
-docker run -p 8080:8080 go-webhook-relay:latest
+docker build -f deployments/Dockerfile -t hooktun:latest .
+docker run -p 8080:8080 hooktun:latest
 ```
+
+**Client with Docker Compose:**
+
+Add the Hooktun client to your existing Docker Compose stack:
+
+```yaml
+services:
+  hooktun-client:
+    image: ghcr.io/adrianokf/hooktun-client:latest
+    restart: unless-stopped
+    environment:
+      - CLIENT_RELAY_URL=https://your-server.fly.dev
+      - CLIENT_CHANNEL_ID=my-channel
+      - CLIENT_TARGET_URL=http://your-app:3000
+      - CLIENT_TOKEN=${HOOKTUN_TOKEN}  # Optional
+```
+
+📖 **See the [Docker Deployment Guide](docs/DOCKER.md) for complete examples and best practices.**
 
 ### Fly.io
 
@@ -356,9 +376,16 @@ Potential improvements:
 - Web UI for monitoring and management
 - Request/response inspection dashboard
 - Webhook signature verification (verify webhook sources)
-- Rate limiting per channel
+- Per-channel rate limiting (currently global only)
 - Metrics and observability (Prometheus)
 - Advanced authentication (OAuth, JWT, etc.)
+
+## Documentation
+
+- 📘 [Quick Start Guide](docs/QUICKSTART.md) - Get started in 5 minutes
+- 🔐 [Authentication Guide](docs/AUTHENTICATION.md) - Secure your channels with pre-shared secrets
+- 🐳 [Docker Deployment Guide](docs/DOCKER.md) - Deploy with Docker and Docker Compose
+- 🔧 [Fly.io SSE Fix](docs/FLY_SSE_FIX.md) - SSE configuration for Fly.io deployments
 
 ## Dependencies
 
@@ -367,6 +394,7 @@ Potential improvements:
 - [Viper](https://github.com/spf13/viper) - Configuration management
 - [Zerolog](https://github.com/rs/zerolog) - Structured logging
 - [UUID](https://github.com/google/uuid) - UUID generation
+- [httprate](https://github.com/go-chi/httprate) - Rate limiting middleware
 
 ## License
 

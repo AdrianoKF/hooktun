@@ -14,10 +14,10 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build relay binary
+# Build hooktun binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags="-w -s" \
-    -o relay \
+    -o hooktun \
     ./cmd/relay
 
 # Final stage
@@ -29,10 +29,10 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /build/relay .
+COPY --from=builder /build/hooktun .
 
 # Expose port
 EXPOSE 8080
 
-# Run relay server
-CMD ["./relay"]
+# Run hooktun server
+CMD ["./hooktun"]

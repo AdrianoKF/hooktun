@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 	"github.com/rs/zerolog/log"
 )
 
@@ -40,6 +41,9 @@ func (s *Server) Start() error {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
+	// Rate limit: 100 requests per minute per IP, with burst of 20
+	// This helps prevent DoS attempts while allowing normal traffic
+	r.Use(httprate.LimitByIP(100, 1*time.Minute))
 
 	// Routes
 	r.Get("/connect/{channel_id}", HandleSSE(s.hub, s.secrets))

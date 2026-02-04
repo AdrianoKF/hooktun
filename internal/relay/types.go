@@ -1,6 +1,6 @@
 package relay
 
-import "github.com/adrianokf/go-webhook-relay/internal/shared"
+import "github.com/adrianokf/hooktun/internal/shared"
 
 // Client represents an SSE client connection
 type Client struct {

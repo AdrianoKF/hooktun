@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/adrianokf/go-webhook-relay/internal/shared"
+	"github.com/adrianokf/hooktun/internal/shared"
 	"github.com/rs/zerolog/log"
 )
 

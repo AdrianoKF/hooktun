@@ -1,6 +1,6 @@
 # Authentication
 
-Go Webhook Relay supports channel-based authentication using pre-shared secrets.
+Hooktun supports channel-based authentication using pre-shared secrets.
 
 ## Overview
 

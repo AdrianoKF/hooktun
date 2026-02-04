@@ -8,11 +8,14 @@ before:
     - go mod tidy
     - go mod download
 
+snapshot:
+  version_template: "{{ incpatch .Version }}"
+
 builds:
-  # Relay Server
+  # Hooktun Server
   - id: relay
     main: ./cmd/relay
-    binary: relay
+    binary: hooktun
     goos:
       - linux
       - darwin
@@ -27,10 +30,10 @@ builds:
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}
 
-  # Client
+  # Hooktun Client
   - id: client
     main: ./cmd/client
-    binary: client
+    binary: hooktun-client
     goos:
       - linux
       - darwin
@@ -44,3 +47,22 @@ builds:
       - -X main.version={{.Version}}
       - -X main.commit={{.Commit}}
       - -X main.date={{.Date}}
+
+dockers_v2:
+  - id: client
+    ids:
+      - client
+    dockerfile: deployments/Dockerfile.client
+    images:
+      - "ghcr.io/adrianokf/hooktun-client"
+      - "arumpold/hooktun-client"
+    tags:
+      - "v{{ .Version }}"
+      - "{{ if .IsNightly }}nightly{{ end }}"
+      - "{{ if not .IsNightly }}latest{{ end }}"
+    labels:
+      "org.opencontainers.image.description": "Hooktun Client - Webhook tunnel client"
+      "org.opencontainers.image.source": "{{ .GitURL }}"
+      "org.opencontainers.image.version": "{{ .Version }}"
+      "org.opencontainers.image.created": "{{ .Date }}"
+      "org.opencontainers.image.revision": "{{ .FullCommit }}"

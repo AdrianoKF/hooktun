@@ -1,0 +1,16 @@
+# Dockerfile for webhook relay client
+# Used by goreleaser - binary is pre-built and copied in
+FROM alpine:latest
+
+ARG TARGETPLATFORM
+
+# Install ca-certificates for HTTPS
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /app
+
+# Copy pre-built binary from goreleaser
+COPY $TARGETPLATFORM/hooktun-client /usr/bin
+
+# Run hooktun client
+ENTRYPOINT ["/usr/bin/hooktun-client"]

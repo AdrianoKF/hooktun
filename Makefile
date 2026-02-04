@@ -2,12 +2,12 @@
 
 # Build for current platform
 build-relay:
-	@echo "Building relay server..."
-	@go build -o bin/relay ./cmd/relay
+	@echo "Building hooktun server..."
+	@go build -o bin/hooktun ./cmd/relay
 
 build-client:
-	@echo "Building client..."
-	@go build -o bin/client ./cmd/client
+	@echo "Building hooktun client..."
+	@go build -o bin/hooktun-client ./cmd/client
 
 build-all: build-relay build-client
 
@@ -33,10 +33,10 @@ clean:
 
 # Docker targets
 docker-build:
-	@docker build -f deployments/Dockerfile -t go-webhook-relay:latest .
+	@docker build -f deployments/Dockerfile -t hooktun:latest .
 
 docker-run:
-	@docker run -p 8080:8080 go-webhook-relay:latest
+	@docker run -p 8080:8080 hooktun:latest
 
 # Install dependencies
 deps:

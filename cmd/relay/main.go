@@ -7,8 +7,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/adrianokf/go-webhook-relay/internal/relay"
-	"github.com/adrianokf/go-webhook-relay/internal/shared"
+	"github.com/adrianokf/hooktun/internal/relay"
+	"github.com/adrianokf/hooktun/internal/shared"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,9 +21,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "relay",
-	Short: "Webhook relay server",
-	Long:  `A relay server that receives webhooks and forwards them to connected clients via SSE`,
+	Use:   "hooktun",
+	Short: "Hooktun relay server",
+	Long:  `Hooktun - A tunnel server that receives webhooks and forwards them to connected clients via SSE`,
 	Run:   run,
 }
 
@@ -53,7 +53,7 @@ func run(cmd *cobra.Command, args []string) {
 		Int("port", port).
 		Str("log_level", logLevel).
 		Bool("auth_enabled", channelSecrets != "").
-		Msg("Starting webhook relay server")
+		Msg("Starting hooktun relay server")
 
 	// Create server
 	server := relay.NewServer(port, channelSecrets)
