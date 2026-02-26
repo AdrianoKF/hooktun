@@ -65,3 +65,19 @@ dockers_v2:
       "org.opencontainers.image.version": "{{ .Version }}"
       "org.opencontainers.image.created": "{{ .Date }}"
       "org.opencontainers.image.revision": "{{ .FullCommit }}"
+  - id: server
+    ids:
+      - server
+    dockerfile: deployments/Dockerfile
+    images:
+      - "ghcr.io/adrianokf/hooktun-server"
+    tags:
+      - "v{{ .Version }}"
+      - "{{ if .IsNightly }}nightly{{ end }}"
+      - "{{ if not .IsNightly }}latest{{ end }}"
+    labels:
+      "org.opencontainers.image.description": "Hooktun server - Webhook tunnel server"
+      "org.opencontainers.image.source": "{{ .GitURL }}"
+      "org.opencontainers.image.version": "{{ .Version }}"
+      "org.opencontainers.image.created": "{{ .Date }}"
+      "org.opencontainers.image.revision": "{{ .FullCommit }}"
