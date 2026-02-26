@@ -13,7 +13,7 @@ snapshot:
 
 builds:
   # Hooktun Server
-  - id: relay
+  - id: server
     main: ./cmd/relay
     binary: hooktun
     goos:
@@ -68,7 +68,7 @@ dockers_v2:
   - id: server
     ids:
       - server
-    dockerfile: deployments/Dockerfile
+    dockerfile: deployments/Dockerfile.server
     images:
       - "ghcr.io/adrianokf/hooktun-server"
     tags:

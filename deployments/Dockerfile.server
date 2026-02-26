@@ -1,0 +1,19 @@
+# Dockerfile for hooktun relay server
+# Used by goreleaser - binary is pre-built and copied in
+FROM alpine:latest
+
+ARG TARGETPLATFORM
+
+# Install ca-certificates for HTTPS
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /app
+
+# Copy pre-built binary from goreleaser
+COPY $TARGETPLATFORM/hooktun /usr/bin/hooktun
+
+# Expose relay port
+EXPOSE 8080
+
+# Run hooktun relay server
+ENTRYPOINT ["/usr/bin/hooktun"]
