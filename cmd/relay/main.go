@@ -15,8 +15,9 @@ import (
 )
 
 var (
-	port          int
-	logLevel      string
+	port           int
+	logLevel       string
+	logFormat      string
 	channelSecrets string
 )
 
@@ -30,10 +31,12 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.Flags().IntVar(&port, "port", 8080, "Port to listen on")
 	rootCmd.Flags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
+	rootCmd.Flags().StringVar(&logFormat, "log-format", "auto", "Log format (auto, json, console)")
 	rootCmd.Flags().StringVar(&channelSecrets, "channel-secrets", "", "Channel secrets (format: channel1:secret1,channel2:secret2)")
 
 	viper.BindPFlag("port", rootCmd.Flags().Lookup("port"))
 	viper.BindPFlag("log_level", rootCmd.Flags().Lookup("log-level"))
+	viper.BindPFlag("log_format", rootCmd.Flags().Lookup("log-format"))
 	viper.BindPFlag("channel_secrets", rootCmd.Flags().Lookup("channel-secrets"))
 
 	viper.SetEnvPrefix("RELAY")
@@ -44,14 +47,16 @@ func run(cmd *cobra.Command, args []string) {
 	// Get config from viper (respects env vars)
 	port = viper.GetInt("port")
 	logLevel = viper.GetString("log_level")
+	logFormat = viper.GetString("log_format")
 	channelSecrets = viper.GetString("channel_secrets")
 
 	// Setup logger
-	shared.SetupLogger(logLevel)
+	resolvedLogFormat := shared.SetupLogger(logLevel, logFormat)
 
 	log.Info().
 		Int("port", port).
 		Str("log_level", logLevel).
+		Str("log_format", resolvedLogFormat).
 		Bool("auth_enabled", channelSecrets != "").
 		Msg("Starting hooktun relay server")
 

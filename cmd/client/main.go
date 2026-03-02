@@ -20,6 +20,7 @@ var (
 	targetURL string
 	token     string
 	logLevel  string
+	logFormat string
 )
 
 var rootCmd = &cobra.Command{
@@ -35,6 +36,7 @@ func init() {
 	rootCmd.Flags().StringVar(&targetURL, "target-url", "", "Local target URL to forward webhooks to (required)")
 	rootCmd.Flags().StringVar(&token, "token", "", "Authentication token for the channel")
 	rootCmd.Flags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
+	rootCmd.Flags().StringVar(&logFormat, "log-format", "auto", "Log format (auto, json, console)")
 
 	// Don't mark flags as required - we'll validate after viper loads env vars
 	// This allows environment variables to satisfy requirements
@@ -44,6 +46,7 @@ func init() {
 	viper.BindPFlag("target_url", rootCmd.Flags().Lookup("target-url"))
 	viper.BindPFlag("token", rootCmd.Flags().Lookup("token"))
 	viper.BindPFlag("log_level", rootCmd.Flags().Lookup("log-level"))
+	viper.BindPFlag("log_format", rootCmd.Flags().Lookup("log-format"))
 
 	// Enable environment variable support
 	// Environment variables should be prefixed with CLIENT_ (e.g., CLIENT_RELAY_URL)
@@ -60,6 +63,7 @@ func run(cmd *cobra.Command, args []string) {
 	targetURL = viper.GetString("target_url")
 	token = viper.GetString("token")
 	logLevel = viper.GetString("log_level")
+	logFormat = viper.GetString("log_format")
 
 	// Validate required fields after viper loads config
 	var missing []string
@@ -78,7 +82,7 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	// Setup logger
-	shared.SetupLogger(logLevel)
+	resolvedLogFormat := shared.SetupLogger(logLevel, logFormat)
 
 	log.Info().
 		Str("relay_url", relayURL).
@@ -86,6 +90,7 @@ func run(cmd *cobra.Command, args []string) {
 		Str("target_url", targetURL).
 		Bool("auth_enabled", token != "").
 		Str("log_level", logLevel).
+		Str("log_format", resolvedLogFormat).
 		Msg("Starting hooktun client")
 
 	// Create client config

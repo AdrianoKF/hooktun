@@ -101,11 +101,13 @@ The relay server accepts webhooks and forwards them to connected clients.
 
 - `--port`: Port to listen on (default: 8080)
 - `--log-level`: Log level: debug, info, warn, error (default: info)
+- `--log-format`: Log format: auto, json, console (default: auto)
 
 **Environment Variables:**
 
 - `RELAY_PORT`: Port to listen on
-- `LOG_LEVEL`: Log level
+- `RELAY_LOG_LEVEL`: Log level
+- `RELAY_LOG_FORMAT`: Log format (auto, json, console)
 
 **Webhook URL Format:**
 
@@ -151,13 +153,15 @@ The client connects to a relay server and forwards webhooks to a local target.
 - `--channel-id`: Unique channel identifier (required)
 - `--target-url`: Local target URL to forward webhooks to (required)
 - `--log-level`: Log level: debug, info, warn, error (default: info)
+- `--log-format`: Log format: auto, json, console (default: auto)
 
 **Environment Variables:**
 
 - `RELAY_URL`: Relay server URL
 - `CHANNEL_ID`: Channel identifier
 - `TARGET_URL`: Target URL
-- `LOG_LEVEL`: Log level
+- `CLIENT_LOG_LEVEL`: Log level
+- `CLIENT_LOG_FORMAT`: Log format (auto, json, console)
 
 **Example:**
 
@@ -166,7 +170,8 @@ The client connects to a relay server and forwards webhooks to a local target.
   --relay-url=https://relay.example.com \
   --channel-id=my-channel-123 \
   --target-url=http://localhost:3000 \
-  --log-level=info
+  --log-level=info \
+  --log-format=console
 ```
 
 ## Building
@@ -323,7 +328,8 @@ The relay server is a standard Go HTTP application and can be deployed to:
 | Flag                | Environment Variable    | Default | Description                                                 |
 | ------------------- | ----------------------- | ------- | ----------------------------------------------------------- |
 | `--port`            | `RELAY_PORT`            | 8080    | Port to listen on                                           |
-| `--log-level`       | `LOG_LEVEL`             | info    | Log level (debug, info, warn, error)                        |
+| `--log-level`       | `RELAY_LOG_LEVEL`       | info    | Log level (debug, info, warn, error)                        |
+| `--log-format`      | `RELAY_LOG_FORMAT`      | auto    | Log format (auto, json, console). `auto` uses JSON on Cloud Run |
 | `--channel-secrets` | `RELAY_CHANNEL_SECRETS` | -       | Channel secrets (format: channel1:secret1,channel2:secret2) |
 
 ### Client
@@ -334,7 +340,8 @@ The relay server is a standard Go HTTP application and can be deployed to:
 | `--channel-id` | `CHANNEL_ID`         | -       | Unique channel ID (required)         |
 | `--target-url` | `TARGET_URL`         | -       | Local target URL (required)          |
 | `--token`      | `TOKEN`              | -       | Authentication token for the channel |
-| `--log-level`  | `LOG_LEVEL`          | info    | Log level (debug, info, warn, error) |
+| `--log-level`  | `CLIENT_LOG_LEVEL`   | info    | Log level (debug, info, warn, error) |
+| `--log-format` | `CLIENT_LOG_FORMAT`  | auto    | Log format (auto, json, console). `auto` uses JSON on Cloud Run |
 
 **Security**: See [AUTHENTICATION.md](AUTHENTICATION.md) for details on enabling and configuring authentication.
 
